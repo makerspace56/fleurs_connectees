@@ -19,19 +19,6 @@
 
  */
 
-// Photoresistance avec pont 220 Ohm: 
-// Interne avec neon = 500 +-20
-// Interne sans neon = 240
-// Dehors soleil ciel blanc hier 16h = 840
-
-// Photoresistance avec pont 1k Ohm: 
-// Interne avec neon = 115
-// Interne sans neon = 50
-// Dehors soleil ciel blanc hier 16h = 640
-
-// Dehors soleil ciel blanc hier 16h = 840
-
-
 // These constants won't change.  They're used to give names
 // to the pins used:
 const int analogInPin = A0;  // Analog input pin that the potentiometer is attached to
