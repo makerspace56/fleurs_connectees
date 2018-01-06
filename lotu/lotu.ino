@@ -43,12 +43,10 @@ void setup()
   //monServo.writeMicroseconds(temps);
   // 1600 = ouvert à fond
   // 2300 = fermé completement
-  s3.writeMicroseconds(1500);
   delay(2000);
-  s3.writeMicroseconds(2200);
 }
 
-void Functservo( Servo &monservo, int depart, int fin, int vitesse) {
+void Functservo(Servo &monservo, int depart, int fin, int vitesse) {
   //Functservo: passe en premier le servo concerné, le debut et la fin.
   // Passe le nom du servo vers l'object servo a travers &monservo
  
@@ -108,8 +106,6 @@ void ouvrePetales(){
  
 
   s3.writeMicroseconds(sensorValue);
-  
-
 }
 
 void loop()
