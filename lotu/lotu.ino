@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 #define PERIODE_OUVERTURE_PETALES 1
-#define PERIODE_ROTATION_TIGE 60
+#define PERIODE_ROTATION_TIGE 20
 
 // Petit modif
 // tableau entiers positions 2 moteurs 1 par colonne
@@ -14,6 +14,17 @@ int angles[9][2] = {{321, 231},
 {310, 204},
 {327, 220},
 {336, 238}
+};
+
+int mss[9][2] = {{1700, 1200},
+{1600, 1300},
+{1550, 1180},
+{1500, 1000},
+{1620, 1030},
+{1750, 1070},
+{1860, 1210},
+{1800, 1350},
+{1700, 1320}
 };
 
 int tempsEnSecCompteur = 0;
@@ -42,9 +53,9 @@ void setup()
   //on démarre à une valeur censé être la moitié de
   //l'excursion totale de l'angle réalisé par le servomoteur
   //monServo.writeMicroseconds(temps);
-  // 1600 = ouvert à fond
-  // 2300 = fermé completement
-  delay(2000);
+  // 1100 = ouvert à fond
+  // 1600 = fermé completement
+  s3.writeMicroseconds(1350);
 }
 
 void Functservo(Servo &monservo, int depart, int fin, int vitesse) {
@@ -73,6 +84,12 @@ void Functservo(Servo &monservo, int depart, int fin, int vitesse) {
   }
 }
 
+void tourneTigeCompletEnUneFois(){
+    for(int i = 0; i < 9; i++){
+      tourneTige();
+    }
+}
+
 void tourneTige(){
   int angle1 = angles[cpt][0];
   int angle2 = angles[cpt][1];
@@ -80,14 +97,40 @@ void tourneTige(){
   int angle1next = angles[cpt2][0];
   int angle2next = angles[cpt2][1];
 
-  int ms1 = map(angle1, 285, 331, 1520, 1730);
-  int ms2 = map(angle2, 228, 288, 1210, 1500);
+  int ms1 = map(angle1, 285, 331, 1520, 1730); //mss[cpt][0];
+  int ms2 = map(angle2, 228, 288, 1210, 1500); // mss[cpt][1];
 
-  int ms1next = map(angle1next, 285, 331, 1520, 1730);
-  int ms2next = map(angle2next, 228, 288, 1210, 1500);
+  Serial.print(cpt);Serial.print(" - (ms1, ms2) = ("); Serial.print(ms1);Serial.print(", ");Serial.print(ms2);Serial.println(")");
+  int ms1next = map(angle1next, 285, 331, 1520, 1730); // mss[cpt2][0];
+  int ms2next = map(angle2next, 228, 288, 1210, 1500); // mss[cpt2][1];
 
-  Functservo( s1, ms1, ms1next,50);
-  Functservo( s2, ms2, ms2next,50);
+  Functservo( s1, ms1, ms1next, 10);
+  Functservo( s2, ms2, ms2next, 10);
+  
+  cpt ++;
+  if (cpt == 9){
+    cpt = 0;
+  }
+
+  cpt2 ++;
+  if (cpt2 == 9){
+    cpt2 = 0;
+  }
+}
+
+void tourneTigeParZero(){
+
+  int ms1 = mss[cpt][0];//map(angle1, 285, 331, 1520, 1730);
+  int ms2 = mss[cpt][1];//map(angle2, 228, 288, 1210, 1500);
+
+  Serial.print(cpt);Serial.print(" - (ms1, ms2) = ("); Serial.print(ms1);Serial.print(", ");Serial.print(ms2);Serial.println(")");
+  int ms1next = mss[cpt2][0];//map(angle1next, 285, 331, 1520, 1730);
+  int ms2next = mss[cpt2][1];//map(angle2next, 228, 288, 1210, 1500);
+
+  Functservo( s1, ms1, mss[0][0], 5);
+  Functservo( s2, ms2, mss[0][1], 5);
+  Functservo( s1, mss[0][0], ms1next, 5);
+  Functservo( s2, mss[0][1], ms2next, 5);
   
   cpt ++;
   if (cpt == 9){
@@ -101,24 +144,38 @@ void tourneTige(){
 }
 
 void ouvrePetales(){
-  sensorValue = analogRead(A0);
-   Serial.print("valueA0= ");Serial.println(sensorValue);
-  sensorValue = map(sensorValue, sensorMin, sensorMax, 2000, 1000);
- 
+  
+  // Configuration retenue
+  // Photoresistance avec pont 1k Ohm: 
+  // Interne avec neon = 115
+  // Interne sans neon = 50
+  // Dehors soleil ciel blanc hier 16h = 640
 
+  // Configuration non retenue
+  // Photoresistance avec pont 220 Ohm: 
+  // Interne avec neon = 500 +-20
+  // Interne sans neon = 240
+  // Dehors soleil ciel blanc hier 16h = 840
+
+  sensorValue = analogRead(A0);
+  Serial.print("valueA0= ");Serial.println(sensorValue);
+  sensorValue = map(sensorValue, 50, 115, 1600, 1100);
+  sensorValue = max(1100, sensorValue);
+  sensorValue = min(1600, sensorValue);
+  
   s3.writeMicroseconds(sensorValue);
 }
 
 void loop()
 {
   // Toutes les PERIODE_OUVERTURE_PETALES => ouvre la fleur en fonction de la lumière
-  //if (tempsEnSecCompteur % PERIODE_OUVERTURE_PETALES == 0){
-  //  ouvrePetales();
-  //}
+  if (tempsEnSecCompteur % PERIODE_OUVERTURE_PETALES == 0){
+    ouvrePetales();
+  }
   
   // Tous les PERIODE_ROTATION_TIGE secondes => tourne la tige et RAZ du compteur de temps
   if (tempsEnSecCompteur % PERIODE_ROTATION_TIGE == 0){
-    tourneTige();
+    tourneTigeCompletEnUneFois();
     tempsEnSecCompteur = 0;  
   }
 
