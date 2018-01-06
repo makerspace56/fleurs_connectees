@@ -3,6 +3,7 @@
 #define PERIODE_OUVERTURE_PETALES 1
 #define PERIODE_ROTATION_TIGE 60
 
+// Petit modif
 // tableau entiers positions 2 moteurs 1 par colonne
 int angles[9][2] = {{321, 231},
 {332, 247},
