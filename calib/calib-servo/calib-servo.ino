@@ -9,7 +9,7 @@ void setup()
   Serial.begin(115200);
   Serial.println("Calibrage Servo");
   Serial.println("a= +10; q= -10; z= +100; s= -100");
-  monServo.attach(12);
+  monServo.attach(11);
   //on démarreà unevaleurcenséêtrelamoitié de
   //l'excursion totaledel'angleréalisépar le servomoteur
   monServo.writeMicroseconds(temps);
