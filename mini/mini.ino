@@ -2,7 +2,7 @@
 // 2 servos - 1 Module de capteur infrarouge d'évitement d'obstacles (https://e.banana-pi.fr/distance/121-module-de-capteur-infrarouge-d-evitement-d-obstacles.html)
 
 
-//Scenario:
+//Scenario :
 //elle s'oriente vers la personne 
 //et s'ouvre et se ferme 3x 
 //puis de se remet en position "normal"
