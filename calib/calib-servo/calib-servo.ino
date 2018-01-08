@@ -12,7 +12,7 @@ void setup()
   Serial.begin(115200);
   Serial.println("Calibrage Servo");
   Serial.println("p= nextServo; a= +10; q= -10; z= +100; s= -100");
-  servos[0].attach(1);
+  servos[0].attach(11);
   servos[1].attach(10);
   servos[2].attach(9);
   
