@@ -86,21 +86,27 @@ void  loop()
   // Quand le capteur detecte un mouvement la varaible se met HIGH
   if (val == HIGH)                    
   {
+    Serial.println("Animation !");
+    
     // Declenche le son
     Serial.println("Declenche le son");
     digitalWrite(commandeSon, HIGH);
     delay(10);
 
     // Ouverture des pétales
+    Serial.println("Ouverture des pétales");
     parcourtServo(servoPetales, 1100, 1600, 5);
-    
+
     // Attend 7 secondes, la durée du son
+    Serial.println("Attend la durée du son");
     delay(7000);
 
     // Arrête le son
+    Serial.println("Arrête le son");
     digitalWrite(commandeSon, LOW);
 
     // Fermeture des pétales
+    Serial.println("Fermeture des pétales");
     parcourtServo(servoPetales, 1600, 1100, 5);
 
     // - Attente pour s'économiser un peu qd qq active le capteur
