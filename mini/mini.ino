@@ -26,19 +26,19 @@ int ledTemoin = 2;
 int inputCapteur = 8;
 
 // Servos
-Servo servoOrientation;  
+Servo servoTete;  
 Servo servoPetales;
 
 // parcourtServo : passe le servo concerné, le debut et la fin.
-// Passe le nom du servo vers l'object servo a travers &monservo
-void parcourtServo( Servo &monservo, int depart, int fin, int vitesse) {
+// Passe le nom du servo vers l'object servo a travers &servo
+void parcourtServo( Servo &servo, int depart, int fin, int vitesse) {
  
   //if (vitesse <=1 ) {vitesse == 1; }
   if (depart > fin)
   {
     for (int pos = depart ; pos >= fin ; pos--) 
     { 
-      monservo.write(pos);
+      servo.write(pos);
       delay(vitesse);
     }
   }
@@ -46,7 +46,7 @@ void parcourtServo( Servo &monservo, int depart, int fin, int vitesse) {
   {
     for (int pos = depart ; pos <= fin ; pos++) 
     { 
-      monservo.write(pos);
+      servo.write(pos);
       delay(vitesse);
     }
   } 
@@ -66,7 +66,7 @@ void  setup()
   servoPetales.attach(11);
   
   // Servo de la tete qui se penche vers la personne                
-  servoOrientation.attach(10);
+  servoTete.attach(10);
 
   // Initialise la liaison série pour debug
   Serial.begin(9600);
@@ -85,7 +85,7 @@ void  loop()
     // Execute le programme :
     // - elle se dirige vers la personne
     Serial.println("Révérence");
-    parcourtServo(servoOrientation, 1500, 900, 5);
+    parcourtServo(servoTete, 1500, 900, 5);
     
     // - elle s'ouvre et se ferme 3x 
     for (int i = 0; i < 3; i++) {
@@ -97,7 +97,7 @@ void  loop()
     
     // - puis elle se remet en position initiale
     Serial.println("Retour en position initiale");
-    parcourtServo(servoOrientation, 900, 1500, 5);
+    parcourtServo(servoTete, 900, 1500, 5);
 
     // - Attente pour s'économiser un peu qd qq active le capteur
     delay(5000);
