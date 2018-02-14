@@ -10,6 +10,7 @@
 
 #include <Servo.h>
 #include <Adafruit_NeoPixel.h>
+#define BRIGHTNESS 50
 #define LEDPIN 5 // pin DIN connecté a l'arduino
 #define NUMBER_PIEXELS 9// nombre de led allumé 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMBER_PIEXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
@@ -27,6 +28,7 @@ Servo myservo1;
 void  setup()
 {
   strip.begin();                  // connection avec le ledsrtip
+  strip.setBrightness(BRIGHTNESS);
   pinMode(inputPin, INPUT);      // le pin du capteur est INPUT
   pinMode(7 , OUTPUT); // commande pour faire passer le transistor de passant a saturé
   pinMode(led,OUTPUT);                    // le pin de la led est OUTPUT 

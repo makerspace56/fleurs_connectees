@@ -25,6 +25,7 @@ int ledTemoin = 2;
 
 // Capteur
 int inputPin = 8;
+int capteur = 0;
 
 // Commande pour faire lecture sur le module de son
 int commandeSon = 7;
@@ -80,11 +81,14 @@ void  setup()
 void  loop()
 {
   // lit la valeur digital et la place dans la variable val
-  int val = digitalRead(inputPin);     
-  Serial.print("val = ");Serial.println(val);
-
+  int capteurPrec = capteur;
+  capteur = digitalRead(inputPin);     
+  if (capteur != capteurPrec){
+    Serial.print("capteur = ");Serial.println(capteur);
+  }
+  
   // Quand le capteur detecte un mouvement la varaible se met HIGH
-  if (val == HIGH)                    
+  if (capteur == LOW)                    
   {
     Serial.println("Animation !");
     
@@ -92,6 +96,7 @@ void  loop()
     Serial.println("Declenche le son");
     digitalWrite(commandeSon, HIGH);
     delay(10);
+    digitalWrite(commandeSon, LOW);
 
     // Ouverture des pétales
     Serial.println("Ouverture des pétales");
@@ -110,6 +115,7 @@ void  loop()
     parcourtServo(servoPetales, 1600, 1100, 5);
 
     // - Attente pour s'économiser un peu qd qq active le capteur
+    Serial.println("Repos de 5 secondes");
     delay(5000);
   }
   else

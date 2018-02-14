@@ -1,5 +1,5 @@
 // Issu du document http://eskimon.fr/public/ebook/Arduino_-_Premiers_pas_en_informatique_embarquee.pdf
-
+//valeur max 1360 
 #include <Servo.h>
 const int SERVO_COUNT = 3;
 
