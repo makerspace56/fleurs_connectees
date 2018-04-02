@@ -20,6 +20,17 @@
 
 #include <Servo.h>
 
+#define SERVO_TETE_PIN    10
+#define SERVO_TETE_MIN    750
+#define SERVO_TETE_MAX    1250
+#define SERVO_PETALES_PIN 11
+#define SERVO_PETALES_MIN 800
+#define SERVO_PETALES_MAX 1600
+#define CHORE_OUV_FER_NB  3
+
+
+
+
 // Led temoin
 int ledTemoin = 2;
 
@@ -100,7 +111,7 @@ void  loop()
 
     // Ouverture des pétales
     Serial.println("Ouverture des pétales");
-    parcourtServo(servoPetales, 1100, 1600, 5);
+    parcourtServo(servoPetales, SERVO_PETALES_MIN, SERVO_PETALES_MAX, 5);
 
     // Attend 7 secondes, la durée du son
     Serial.println("Attend la durée du son");
@@ -112,7 +123,7 @@ void  loop()
 
     // Fermeture des pétales
     Serial.println("Fermeture des pétales");
-    parcourtServo(servoPetales, 1600, 1100, 5);
+   parcourtServo(servoPetales, SERVO_PETALES_MAX, SERVO_PETALES_MIN, 5);
 
     // - Attente pour s'économiser un peu qd qq active le capteur
     Serial.println("Repos de 5 secondes");

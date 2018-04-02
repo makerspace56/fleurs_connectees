@@ -12,17 +12,26 @@
 #include <Adafruit_NeoPixel.h>
 #define BRIGHTNESS 50
 #define LEDPIN 5 // pin DIN connecté a l'arduino
-#define NUMBER_PIEXELS 9// nombre de led allumé 
+#define NUMBER_PIEXELS 3// nombre de led allumé 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUMBER_PIEXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
+#define SERVO_TETE_PIN    10
+#define SERVO_TETE_MIN    1200
+#define SERVO_TETE_MAX    2300
+#define SERVO_PETALES_PIN 11
+#define SERVO_PETALES_MIN 1600
+#define SERVO_PETALES_MAX 2300
+#define CHORE_OUV_FER_NB  3
+
 int led = 2;          //led temoin
+int led2 = 3;          // 2eme led
 int inputPin = 8;     // entré du capteur
-int command = 7;     // base du transistor pour commnader l'allumage et l'extinction du ruban de leds
+int command = 7;     // relay pour commnader l'allumage et l'extinction du ruban de leds
                     //du ruban de led
 
-int  val;         //variable pour l'etat du capteur
+int  val = LOW;         //variable pour l'etat du capteur
 
-Servo myservo1;
+Servo servoPetales;
 
 
 void  setup()
@@ -30,11 +39,11 @@ void  setup()
   strip.begin();                  // connection avec le ledsrtip
   strip.setBrightness(BRIGHTNESS);
   pinMode(inputPin, INPUT);      // le pin du capteur est INPUT
-  pinMode(7 , OUTPUT); // commande pour faire passer le transistor de passant a saturé
+  pinMode(7 , OUTPUT); // commande pour le relay
   pinMode(led,OUTPUT);                    // le pin de la led est OUTPUT 
-  digitalWrite(2,HIGH);                // allume la led temoin 
+  digitalWrite(led,HIGH);                // allume la led temoin 
   
-  myservo1.attach(11);         //servo des petales qui s'ouvre et qui se ferme
+  servoPetales.attach(SERVO_PETALES_PIN);         //servo des petales qui s'ouvre et qui se ferme
   Serial.begin(9600);
 }
 void  loop()
@@ -44,14 +53,16 @@ void  loop()
 
     if (val == HIGH)                    //quand le capteur detecte un mouvement la varible se met HIGH
     {
-      Functservo(myservo1, 1100, 1600, 5);         //les pétales s'ouvrent
+      parcourtServo(servoPetales, SERVO_PETALES_MAX, SERVO_PETALES_MIN, 5);  //les pétales s'ouvrent
       delay(10);
-      digitalWrite(command, LOW);          // leds strip allumé
+      digitalWrite(command, HIGH);          // leds strip allumé
+      Serial.println("command HIGH");
       delay(10);
       rainbowCycle(5);                       // ohh un joli arc en ciel !! le 5 correspond au temp 
       delay(10);
-      digitalWrite(command, HIGH);           // leds strip eteint
-      Functservo(myservo1, 1600, 1100, 5);   //les petales se ferment
+      digitalWrite(command, LOW);           // leds strip eteint
+      Serial.println("command, LOW");
+      parcourtServo(servoPetales, SERVO_PETALES_MIN, SERVO_PETALES_MAX, 5);   //les petales se ferment
 
     }
  
@@ -60,31 +71,29 @@ void  loop()
 
 
 
-void Functservo( Servo &monservo, int depart, int fin, int vitesse) {
-  //Functservo: passe en premier le servo concerné, le debut et la fin.
-  // Passe le nom du servo vers l'object servo a travers &monservo
-
+void parcourtServo( Servo &servo, int depart, int fin, int vitesse) {
+ 
 
   //if (vitesse <=1 ) {vitesse == 1; }
-  if (depart > fin) {
+  if (depart > fin)
+  {
 
     for (int pos = depart ; pos >= fin ; pos--)
     {
-      monservo.write(pos);
+      servo.write(pos);
       delay(vitesse);
-      //Serial.println(pos);
     }
   }
-  else
+ else
   {
-    for (int pos = depart ; pos <= fin ; pos++)
-    {
-      monservo.write(pos);
+    for (int pos = depart ; pos <= fin ; pos++) 
+    { 
+  
+      servo.write(pos);
       delay(vitesse);
-      //Serial.println(pos);
     }
-  }
-
+  } 
+  
 }
 void rainbowCycle(int SpeedDelay) {
   byte *c;

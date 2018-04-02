@@ -27,7 +27,8 @@ void loop()
   //desdonnées surlaliaisonsérie ?(lorsque l'onappuiesur 'a'ou 'd')
   if(Serial.available())
   {
-    char commande=Serial.read(); //onlit
+    char commande=Serial.read(); 
+    //onlit
     //on modifie la consigne si c'est un caractère qui nous intéresse
     switch(commande){
       case 'a': servoTemps[currentServoIndex] +=10;  // ajout   de  10 µs au temps
