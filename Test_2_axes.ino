@@ -1,54 +1,35 @@
+/* 
+Un programme pour tester une petite fleur sans capteur 
+et sans qu'elle soit branchée à sa grande. 
+La variable de lancement change automatiquement à chaque cycle, 
+espacé par le délai CHORE_ATTENTE_FIN en millisecondes : 
+La fleur danse puis se repose puis redanse puis se repose... etc à l'infini
 
-//
-//  ,---.    ,---..-./`) ,---.   .--..-./`)
-//  |    \  /    |\ .-.')|    \  |  |\ .-.')
-//  |  ,  \/  ,  |/ `-' \|  ,  \ |  |/ `-' \ 
-//  |  |\_   /|  | `-'`"`|  |\_ \|  | `-'`"`
-//  |  _( )_/ |  | .---. |  _( )_\  | .---.
-//  | (_ o _) |  | |   | | (_ o _)  | |   |
-//  |  (_,_)  |  | |   | |  (_,_)\  | |   |
-//  |  |      |  | |   | |  |    |  | |   |
-//  '--'      '--' '---' '--'    '--' '---'
-//
-//
+LED Témoin d'alimentation : ledTemoin
 
-// 2 servos - à lancer sans capteur 
+*/
 
-// Scenario : 
 #include <Servo.h>
 
-//Ginette : grande avec 3 servos
-//#define SLAVE_ADDRESS 0x13
-
-// Paulette: petite 2 servos
-//#define SLAVE_ADDRESS 0x10
-
-// Arlette: petite 2 servos + voisine de Droite (face technique, gauche face avant)
-#define SLAVE_ADDRESS 0x11
+// Déclaration des Pin Moteurs et de leurs valeurs MIN / MAX
 #define SERVO_TETE_PIN    10
 #define SERVO_TETE_MIN    600
 #define SERVO_TETE_MAX    1800
 #define SERVO_PETALES_PIN 11
 #define SERVO_PETALES_MIN 600
 #define SERVO_PETALES_MAX 1800
+// Déclaration de variable pour la chorégraphie
 #define CHORE_OUV_FER_NB  2
 #define CHORE_ATTENTE_FIN 2000
-
-
-// Led temoin Rouge : ALIM
-int ledTemoin = 2; // choix du pin 
-
-// données envoyé i2c
-byte x = 0;
-
 bool chore = false;
 
-int premTour = 0 ;              // variable pour une boucle de placement au debut
+// Led temoin
+int ledTemoin = 2; // choix du pin 
 
-// Capteur
-//int inputCapteur = 8;
+// variable pour une boucle de placement au debut
+int premTour = 0 ;          
 
-// Servos
+// déclaration des Servos
 Servo servoTete;
 Servo servoPetales;
 
@@ -75,24 +56,6 @@ void parcourtServo( Servo &servo, int depart, int fin, int vitesse) {
 
 }
 
-/* 
-void receiveEvent(int howMany) {
-  while (Wire.available() != 0) { // loop through all but the last
-    int v = Wire.read(); // receive byte as a character
-    switch (v) {
-      case 0:
-        chore = true;
-         digitalWrite(ledPinV, HIGH);  // turn LED ON
-        Serial.print("Chore #1");
-        break;
-      default:
-        Serial.print("Code inconnu");
-        break;
-    }
-  }
-} 
-*  
-*/
 
 void  setup()
 {
@@ -147,8 +110,8 @@ if(premTour == 0){ // la on pourrait prevoir un truc modulo pour qu'elle se repl
   
   parcourtServo(servoTete, SERVO_TETE_MAX, Tete_Moy, 10);
 
-    // - Attente pour s'économiser un peu qd qq active le capteur
-    delay(2000);
+    // - Attente pour s'économiser un peu après une danse
+    delay(CHORE_ATTENTE_FIN);
   }
   else{ // si on ne reçoit rien
       digitalWrite(ledTemoin, LOW);  // turn LED msg OFF
