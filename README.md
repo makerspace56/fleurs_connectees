@@ -14,3 +14,7 @@ Cette compo pour chaque bac car à chaque fois il faut calibrer les moteurs et m
 TETE_MIN / TETE_MAX + PETALES_MIN / PETALES_MAX + pour la Ginette TIGE_MIN / TIGE_MAX
 en fonction des données relevées
 
+09/05/18
+NOUVEAU !!!
+AP-WebServer permet de controler des servo depuis son telephone 
+avec un esp8266 !!
